@@ -78,12 +78,14 @@ int main()
 	t7.join();
 
 
-	//workloads->running = true;
-	//std::cout << "Benchmarking float multiply operations..." << std::endl;
-	//std::thread t8(&Workloads::StartIntegerAdd, workloads);
-	//std::this_thread::sleep_for(std::chrono::milliseconds(durationMilliseconds));
-	//workloads->running = false;
-	//std::cout << "Float multiply operations per ms: " << (workloads->GetExecutedOperations() / durationMilliseconds) << std::endl;
+	workloads->running = true;
+	std::cout << "Benchmarking vector multiply operations..." << std::endl;
+	std::thread t8(&Workloads::StartVectorMultiply, workloads);
+	std::this_thread::sleep_for(std::chrono::milliseconds(durationMilliseconds));
+	workloads->running = false;
+	std::cout << "Multiply per ms using vectors: " << (workloads->GetExecutedOperations() / durationMilliseconds) << std::endl;
+	std::cout <<'\n';
+	t8.join();
 
 	getchar();
 }

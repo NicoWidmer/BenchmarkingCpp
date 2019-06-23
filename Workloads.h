@@ -1,5 +1,6 @@
 #pragma once
 #include <cstdlib>
+#include <immintrin.h>
 
 class Workloads
 {
@@ -17,6 +18,35 @@ public:
 			floatSourceArray[i] = rand();
 			if (rand() % 2)
 				floatSourceArray[i] = floatSourceArray[i] * (-1);
+		}
+
+		for (int i = 0; i < ArraySizeVector; i++)
+		{
+			float float0 = rand();
+			if (rand() % 2)
+				float0 = float0 * (-1);
+			float float1 = rand();
+			if (rand() % 2)
+				float1 = float1 * (-1);
+			float float2 = rand();
+			if (rand() % 2)
+				float2 = float2 * (-1);
+			float float3 = rand();
+			if (rand() % 2)
+				float3 = float3 * (-1);
+			float float4 = rand();
+			if (rand() % 2)
+				float4 = float4 * (-1);
+			float float5 = rand();
+			if (rand() % 2)
+				float5 = float5 * (-1);
+			float float6 = rand();
+			if (rand() % 2)
+				float6 = float6 * (-1);
+			float float7 = rand();
+			if (rand() % 2)
+				float7 = float7 * (-1);
+			vectorSourceArray[i] = { 1, 2, 3, 4, 5, 6, 7, 8 };
 		}
 	}
 
@@ -97,16 +127,16 @@ public:
         }
     }
 
-    //void StartVectorMultiply()
-    //{
-    //    loopCount = 0;
+    void StartVectorMultiply()
+    {
+        loopCount = 0;
 
-    //    while (running)
-    //    {
-    //        VectorMultiply();
-    //        loopCount++;
-    //    }
-    //}
+        while (running)
+        {
+            VectorMultiply();
+            loopCount++;
+        }
+    }
 
     long long GetExecutedOperations()
     {
@@ -116,13 +146,14 @@ public:
 
 private:
 	static const int ArraySize = 1024;
-    //static const int ArraySizeVector = ArraySize / 4;
+    static const int ArraySizeVector = ArraySize / 8;
     int intSourceArray [ArraySize];
     int intResultArray [ArraySize];
     float floatSourceArray [ArraySize];
     float floatResultArray [ArraySize];
-    //Vector4[] vectorSourceArray = new Vector4[ArraySizeVector];
-    //Vector4[] vectorResultArray = new Vector4[ArraySizeVector];
+    __m256 vectorSourceArray [ArraySizeVector];
+    __m256 vectorResultArray [ArraySizeVector];
+	__m256 vectorMultiplier = _mm256_set1_ps(2.0f);
 
 	long long loopCount;
 
@@ -188,5 +219,13 @@ private:
         {
             floatResultArray[i] = floatSourceArray[i] / 2.0f;
         }
+    }
+
+	void VectorMultiply()
+    {
+	    for (int i = 0; i < ArraySizeVector; i++)
+	    {
+		    vectorResultArray[i] = _mm256_mul_ps(vectorSourceArray[i], vectorMultiplier);
+	    }
     }
 };
