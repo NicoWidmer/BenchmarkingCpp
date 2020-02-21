@@ -8,7 +8,42 @@ int main()
 
 	Workloads* workloads = new Workloads();
 
+	std::cout << "Benchmarking creating objects with pointers and new..." << std::endl;
+    std::thread t0(&Workloads::StartCreatingObjectsPointers, workloads);
+	std::this_thread::sleep_for(std::chrono::milliseconds(durationMilliseconds));
+	workloads->running = false;
+    std::cout << "Objects with pointers created per ms: " << (workloads->GetExecutedOperations() / durationMilliseconds) << std::endl;
+    std::cout <<'\n';
+	t0.join();
 
+	workloads->running = true;
+	std::cout << "Benchmarking creating objects without pointers..." << std::endl;
+    std::thread t10(&Workloads::StartCreatingObjects, workloads);
+	std::this_thread::sleep_for(std::chrono::milliseconds(durationMilliseconds));
+	workloads->running = false;
+    std::cout << "Objects without pointers created per ms: " << (workloads->GetExecutedOperations() / durationMilliseconds) << std::endl;
+    std::cout <<'\n';
+	t10.join();
+
+	workloads->running = true;
+	std::cout << "Benchmarking accessing objects with pointers..." << std::endl;
+    std::thread t11(&Workloads::StartAccessingObjectsPointers, workloads);
+	std::this_thread::sleep_for(std::chrono::milliseconds(durationMilliseconds));
+	workloads->running = false;
+    std::cout << "Objects with pointers accessed per ms: " << (workloads->GetExecutedOperations() / durationMilliseconds) << std::endl;
+    std::cout <<'\n';
+	t11.join();
+
+	workloads->running = true;
+	std::cout << "Benchmarking accessing objects without pointers..." << std::endl;
+    std::thread t12(&Workloads::StartAccessingObjects, workloads);
+	std::this_thread::sleep_for(std::chrono::milliseconds(durationMilliseconds));
+	workloads->running = false;
+    std::cout << "Objects without pointers accessed per ms: " << (workloads->GetExecutedOperations() / durationMilliseconds) << std::endl;
+    std::cout <<'\n';
+	t12.join();
+
+	/*workloads->running = true;
 	std::cout << "Benchmarking int add operations..." << std::endl;
     std::thread t1(&Workloads::StartIntegerAdd, workloads);
 	std::this_thread::sleep_for(std::chrono::milliseconds(durationMilliseconds));
@@ -87,5 +122,24 @@ int main()
 	std::cout <<'\n';
 	t8.join();
 
-	getchar();
+
+	workloads->running = true;
+	std::cout << "Benchmarking short add operations..." << std::endl;
+	std::thread t9(&Workloads::StartShortAdd, workloads);
+	std::this_thread::sleep_for(std::chrono::milliseconds(durationMilliseconds));
+	workloads->running = false;
+	std::cout << "Short add operations per ms: " << (workloads->GetExecutedOperations() / durationMilliseconds) << std::endl;
+	std::cout <<'\n';
+	t9.join();
+
+
+	workloads->running = true;
+	std::cout << "Benchmarking branchy short add operations..." << std::endl;
+	std::thread t10(&Workloads::StartBranchyShortAdd, workloads);
+	std::this_thread::sleep_for(std::chrono::milliseconds(durationMilliseconds));
+	workloads->running = false;
+	std::cout << "Branchy short add operations per ms: " << (workloads->GetExecutedOperations() / durationMilliseconds) << std::endl;
+	std::cout <<'\n';
+	t10.join();*/
+	
 }
